@@ -49,6 +49,6 @@ public class RestAutolampimaksiController {
 	public List<Supplier> getAllSuppliers() {
 		return (List<Supplier>) this.supplierRepository.findAll();
 	}
-	
+	//ss
 	
 }
