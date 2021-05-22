@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import palvelinohjelmointi.autonlampimaksi.models.Car;
+import palvelinohjelmointi.autonlampimaksi.repositories.CarRepository;
 
 @Service
 public class CarService {
@@ -20,29 +21,34 @@ public class CarService {
 	@Autowired
 	private ParsingService parsingService;
 	
-	private static String url = "https://secure.defa.com/api/eh/searchregm/?regid=";
+	@Autowired
+	private CarRepository carRepository;
 	
-	private List<Car> cars = new ArrayList<>();
+	// For consept of proof! => should be changed to payd service
+	// private String url = "https://secure.defa.com/api/eh/searchregm/?regid=";
+	
 	//ere-523&c=f
 	
 	public List<Car> allSearchedCars() {
-		return this.cars;
+		List<Car> cars = (List<Car>) this.carRepository.findAll();
+		return cars;
 	}
 	
 	public Car returnCarByRegisterplate(String plate) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Car car = new Car();
 		Map<String, Object> map = new HashMap<>();
+		String url = "https://secure.defa.com/api/eh/searchregm/?regid=";
 		url += plate + "&c=f";
-		
 		try {
 			map = objectMapper.readValue(new URL(url),new TypeReference<Map<String,Object>>(){});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		String rivi = "";
 		int i = 0;
-		//System.out.println(map);
+		
 		for (Object o : map.keySet()) {
 			rivi = map.get(o).toString();
 			if (i > 0) {
@@ -54,7 +60,6 @@ public class CarService {
 					sana = sana.replace("]", "");
 					sana = sana.replace(" ", "");
 					sana = sana.replace("-", "");
-					//System.out.println(sana);
 					
 					String[] j = sana.split("=");
 					if (j[0].equals("make")) {
@@ -75,12 +80,20 @@ public class CarService {
 					if (j[0].equals("engineheater")) {
 						car.setEngineheater(j[1]);
 					}
+					car.setPlate(plate);
 				}
-			}
+			}			
 			
 			i++;
 		}
-		this.cars.add(car);
+		try {
+			this.carRepository.save(car);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Auto kyseisellä rekisterinumerolla jo olemassa!");
+		}
+		
+		
 		return car;
 	}
 }

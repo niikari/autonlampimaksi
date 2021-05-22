@@ -31,10 +31,7 @@ public class RestAutolampimaksiController {
 	
 	@Autowired
 	private SupplierRepository supplierRepository;
-	
-	@Autowired
-	private UserRepository userRepository;
-	
+		
 	@Autowired
 	private CarService carService;
 	
@@ -58,9 +55,16 @@ public class RestAutolampimaksiController {
 	//ss
 	
 	@GetMapping("/cars/{plate}")
+	@ResponseBody
 	public Car returnACarByLicense(@PathVariable(name="plate") String plate) {
 		return this.carService.returnCarByRegisterplate(plate);
-		
+		//return plate;
+	}
+	
+	@GetMapping("/cars")
+	@ResponseBody
+	public List<Car> returnAllCars() {
+		return this.carService.allSearchedCars();
 	}
 	
 }
