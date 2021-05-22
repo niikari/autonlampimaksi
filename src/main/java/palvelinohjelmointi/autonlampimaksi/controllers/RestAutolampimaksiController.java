@@ -1,5 +1,6 @@
 package palvelinohjelmointi.autonlampimaksi.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import palvelinohjelmointi.autonlampimaksi.models.Car;
 import palvelinohjelmointi.autonlampimaksi.models.Enterprise;
 import palvelinohjelmointi.autonlampimaksi.models.Price;
 import palvelinohjelmointi.autonlampimaksi.models.Supplier;
@@ -19,6 +21,7 @@ import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.PriceRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.SupplierRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.UserRepository;
+import palvelinohjelmointi.autonlampimaksi.services.CarService;
 
 @RestController
 public class RestAutolampimaksiController {
@@ -31,6 +34,9 @@ public class RestAutolampimaksiController {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private CarService carService;
 	
 	@GetMapping("/enterprises")
 	@ResponseBody
@@ -50,5 +56,11 @@ public class RestAutolampimaksiController {
 		return (List<Supplier>) this.supplierRepository.findAll();
 	}
 	//ss
+	
+	@GetMapping("/cars/{plate}")
+	public Car returnACarByLicense(@PathVariable(name="plate") String plate) {
+		return this.carService.returnCarByRegisterplate(plate);
+		
+	}
 	
 }
