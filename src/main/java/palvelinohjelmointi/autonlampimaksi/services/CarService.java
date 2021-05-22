@@ -1,7 +1,6 @@
 package palvelinohjelmointi.autonlampimaksi.services;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,7 @@ public class CarService {
 		
 		String rivi = "";
 		int i = 0;
-		
+		// VOI TEHDÄ TARKEMMAKSI JOS OSAISI KÄSITELLÄ JSON TIEDOSTON OIKEIN...
 		for (Object o : map.keySet()) {
 			rivi = map.get(o).toString();
 			if (i > 0) {
@@ -59,7 +58,8 @@ public class CarService {
 					sana = sana.replace("}", "");
 					sana = sana.replace("]", "");
 					sana = sana.replace(" ", "");
-					sana = sana.replace("-", "");
+					System.out.println(sana);
+					//sana = sana.replace("-", "");
 					
 					String[] j = sana.split("=");
 					if (j[0].equals("make")) {
@@ -75,10 +75,13 @@ public class CarService {
 						car.setFuel(j[1]);
 					}
 					if (j[0].equals("modyear")) {
-						car.setModyear(Integer.parseInt(j[1]));
+						car.setModyear(j[1]);
 					} 
 					if (j[0].equals("engineheater")) {
 						car.setEngineheater(j[1]);
+					}
+					if (j[0].equals("enginecode")) {
+						car.setDevaEngineCode(j[1]);
 					}
 					car.setPlate(plate);
 				}

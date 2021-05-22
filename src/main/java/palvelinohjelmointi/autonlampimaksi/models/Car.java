@@ -25,7 +25,7 @@ public class Car {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private Long carId;
 	
 	@Column(name="plate", unique=true, nullable=false)
 	private String plate;
@@ -34,7 +34,8 @@ public class Car {
 	private String model;
 	private String engine;
 	private String fuel;
-	public int modyear;
+	public String modyear;
 	private String engineheater;
+	private String devaEngineCode;
 		
 }
