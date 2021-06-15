@@ -49,6 +49,14 @@ public class Enterprise {
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
 	List<EnterpriseSupplier> suppliers;
 	
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
+	List<EnterpriseCustomer> enterpriseCustomers;
+	
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
+	List<Booking> bookings;
+	
 	public Enterprise(String name) {
 		this.name = name;
 	}
