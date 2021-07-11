@@ -13,10 +13,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity 
+@Data // LOMBOK
+@NoArgsConstructor // LOMBOK
+@AllArgsConstructor // LOMBOK
 @Table(name="usertable")
 public class User {
 

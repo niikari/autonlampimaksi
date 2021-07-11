@@ -39,9 +39,6 @@ public class Customer {
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
 	List<Car> cars;
 	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
-	List<CustomerContact> customerContacts;
 	
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")

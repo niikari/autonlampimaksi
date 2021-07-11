@@ -37,10 +37,6 @@ public class Supplier {
 	
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="supplier")
-	List<SupplierLocation> locations;
-	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="supplier")
 	List<SupplierPrice> prices;
 	
 	public Supplier(String name) {

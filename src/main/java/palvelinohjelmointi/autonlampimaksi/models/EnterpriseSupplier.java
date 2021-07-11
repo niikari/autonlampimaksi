@@ -29,7 +29,4 @@ public class EnterpriseSupplier {
 	@JoinColumn(name="supplierId")
 	private Supplier supplier;
 	
-	@ManyToOne
-	@JoinColumn(name="discountId")
-	private Discount discount;
 }

@@ -27,7 +27,4 @@ public class Defaproduct {
 	
 	private String defaproductNumber;
 	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="defaproduct")
-	List<DefacarDefaproduct> defacarDefaproducts;
 }

@@ -35,18 +35,6 @@ public class Enterprise {
 	
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
-	List<EnterpriseContact> enterpriseContacts;
-	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
-	List<EnterpriseLocation> enterpriseLocations;
-	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
-	List<Price> prices;
-	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
 	List<EnterpriseSupplier> suppliers;
 	
 	@JsonIgnore
