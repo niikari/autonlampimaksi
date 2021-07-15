@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import palvelinohjelmointi.autonlampimaksi.controllers.AutoLampimaksiController;
-import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseContactRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.UserRepository;
 
@@ -26,8 +25,6 @@ class AutonlampimaksiApplicationTests {
 	@Autowired
 	private UserRepository userRepository;
 	
-	@Autowired
-	private EnterpriseContactRepository enterpriseContactRepository;
 	
 	@Test
 	void contextLoads() {

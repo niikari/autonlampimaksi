@@ -1,6 +1,7 @@
 package palvelinohjelmointi.autonlampimaksi;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -40,12 +41,44 @@ public class AutonlampimaksiApplication {
 	@Bean
 	public CommandLineRunner testiTiedonLataaminen() {
 		return (args) -> {
-			//BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
-			
-			
+			//BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();		
+			lueDefaTiedosto();
 			
 		};
 		
+		
+	}
+	
+	// LAITTAA DEFAN DATAN PAIKOILLEEN TIETOKANTAAN
+	public void lueDefaTiedosto() {
+		String tiedosto = "defadata.csv";
+		
+		try {
+			Scanner lukija = new Scanner(new File(tiedosto));
+			int i = 0;
+			while (lukija.hasNext()) {
+				String rivi = lukija.nextLine();
+				if (i > 0) {
+					String[] palat = rivi.split(";");
+					if (palat.length != 9) {
+						System.out.println(rivi);
+					}
+				}
+				
+				i++;
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// LATAA 1 TOIMITTAJAN HINNASTON TIETOKANTAAN (TIEDOSTO TALLENNETTU TÄMÄN PROJEKTIN JUUREEN)
+	public void lueOrumHinnastoTiedosto() {
+		
+	}
+	
+	// LATAA 2 TOIMITTAJAN HINNASTON TIETOKANTAAN (TIEDOSTO TALLENNETTU TÄMÄN PROJEKTIN JUUREEN)
+	public void lueMekonomenHinnastoTiedosto() {
 		
 	}
 	

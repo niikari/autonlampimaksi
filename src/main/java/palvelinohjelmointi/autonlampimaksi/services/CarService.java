@@ -33,12 +33,17 @@ public class CarService {
 		return cars;
 	}
 	
+	public String testi(String toinen) {
+		return "Testiä puskee " + toinen;
+	}
+	
 	public Car returnCarByRegisterplate(String plate) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Car car = new Car();
 		Map<String, Object> map = new HashMap<>();
 		String url = "https://secure.defa.com/api/eh/searchregm/?regid=";
 		url += plate + "&c=f";
+		// System.out.println(url);
 		try {
 			map = objectMapper.readValue(new URL(url),new TypeReference<Map<String,Object>>(){});
 		} catch (Exception e) {
