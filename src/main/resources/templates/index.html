@@ -2,21 +2,140 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
 <head>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-	crossorigin="anonymous">
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-	crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">	
+<link rel="stylesheet" type="text/css" href="css/muoto.css" >
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">	
+
 <title>Auto Lämpimäksi</title>
 </head>
+<style>
+body {font-family: "Times New Roman", Georgia, Serif;}
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Playfair Display";
+  letter-spacing: 5px;
+}
+</style>
 <body>
 
-	<h1>Testi</h1>
+<!-- Navigaatio -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-padding w3-card" style="letter-spacing:4px;">
+    <a href="#home" class="w3-bar-item w3-button">Auto Lämpimäksi</a>
+    <!-- Right-sided navbar links. Hide them on small screens -->
+    <div class="w3-right w3-hide-small">
+      <a href="#about" class="w3-bar-item w3-button">About</a>
+      <a href="#menu" class="w3-bar-item w3-button">Haku</a>
+      <a href="#contact" class="w3-bar-item w3-button">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- Kuva -->
+
+
+ <div class="bbbootstrap">
+     <div class="container">
+         <form>
+             <span role="status" aria-live="polite" class="ui-helper-hidden-accessible"></span>
+             <input type="text" id="Form_Search" value="" placeholder="Syötä rekkari" role="searchbox" class="InputBox " autocomplete="off">
+             <input type="submit" id="Form_Go" class="Button" onclick="rekisteriHaku()" value="Hae">
+             
+         </form>
+     </div>
+ </div>
+ 
+	<!-- Page content -->
+<div class="w3-content" style="max-width:1100px">
+
+<script type="text/javascript">
+function rekisteriHaku(){
+var apiPromise = fetch(`/cars`, {
+    method: 'GET'
+});
+apiPromise.then(async (response)=>{
+var data = await response.json();
+console.log(data);
+const json = JSON.stringify(data);
+document.getElementById("tulos").innerHTML = json;
+});
+}
+	
+</script>
+		
+	 
+	
+	
+  <p id="tulos"></p>
+
+
+        
+  <!-- About Section -->
+  <div class="w3-row w3-padding-64" id="about">
+    <div class="w3-col m6 w3-padding-large w3-hide-small">
+     <img src="https://productimages.biltema.com/v1/Image/product/xlarge/2000033709/3" class="w3-round w3-image w3-opacity-min" alt="Table Setting" width="600" height="750">
+    </div>
+
+    <div class="w3-col m6 w3-padding-large">
+      <h1 class="w3-center">Tietoa meistä</h1><br>
+      <h5 class="w3-center">Helpoin tapa asentaa sopiva lämmitys!</h5>
+      <p class="w3-large"> Blaa  blaa </p>
+    </div>
+  </div>
+  
+  <hr>
+  
+  <!-- Menu Section -->
+  <div class="w3-row w3-padding-64" id="menu">
+    <div class="w3-col l6 w3-padding-large">
+      <h1 class="w3-center"></h1><br>
+      <h4>Väliotsikko</h4>
+      <p class="w3-text-grey">Jotain jotain jotain</p><br>
+    
+         
+    </div>
+    
+    <div class="w3-col l6 w3-padding-large">
+      <img src="https://productimages.biltema.com/v1/Image/product/xlarge/2000033709/3" class="w3-round w3-image w3-opacity-min" alt="Menu" style="width:100%">
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- Contact Section -->
+  <div class="w3-container w3-padding-64" id="contact">
+    <h1>Haluatteko ottaa yhteyttä?</h1><br>
+    <p>Haluatteko, että lisäämme teidät palveluntarjoajiin.</p>
+    <p class="w3-text-blue-grey w3-large"><b>Haaga-Helia Pasila, Helsinki</b></p>
+    <p>Laita viestiii</p>
+    <form action="/action_page.php" target="_blank">
+      <p><input class="w3-input w3-padding-16" type="text" placeholder="Name" required name="Name"></p>
+      <p><input class="w3-input w3-padding-16" type="number" placeholder="How many people" required name="People"></p>
+      <p><input class="w3-input w3-padding-16" type="datetime-local" placeholder="Date and time" required name="date" value="2020-11-16T20:00"></p>
+      <p><input class="w3-input w3-padding-16" type="text" placeholder="Message \ Special requirements" required name="Message"></p>
+      <p><button class="w3-button w3-light-grey w3-section" type="submit">SEND MESSAGE</button></p>
+    </form>
+  </div>
+  
+<!-- End page content -->
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-light-grey w3-padding-32">
+  <p>Jos halutaan vielä footer</p>
+</footer>
+	
+		
+
+
 
 	
 
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
 </body>
 </html>
+

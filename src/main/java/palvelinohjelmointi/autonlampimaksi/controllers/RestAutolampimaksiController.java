@@ -13,12 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import palvelinohjelmointi.autonlampimaksi.models.Car;
 import palvelinohjelmointi.autonlampimaksi.models.Enterprise;
-import palvelinohjelmointi.autonlampimaksi.models.Price;
 import palvelinohjelmointi.autonlampimaksi.models.Supplier;
-import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseContactRepository;
-import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseLocationRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseRepository;
-import palvelinohjelmointi.autonlampimaksi.repositories.PriceRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.SupplierRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.UserRepository;
 import palvelinohjelmointi.autonlampimaksi.services.CarService;

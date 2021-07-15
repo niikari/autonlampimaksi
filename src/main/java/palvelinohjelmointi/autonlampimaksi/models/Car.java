@@ -45,5 +45,7 @@ public class Car {
 	@ManyToOne
 	@JoinColumn(name="customerid")
 	private Customer customer;
+
+	
 		
 }
