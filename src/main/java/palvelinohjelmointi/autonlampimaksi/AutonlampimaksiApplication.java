@@ -39,18 +39,42 @@ public class AutonlampimaksiApplication {
 	}
 
 	@Bean
-	public CommandLineRunner testiTiedonLataaminen() {
+	public CommandLineRunner testiTiedonLataaminen(DefaproductRepository defaproductRepository) {
 		return (args) -> {
 			//BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();		
-			lueDefaTiedosto();
-			
+			//System.out.println(lueDefaTiedosto().size());
+			lueDefaa();
 		};
 		
 		
 	}
 	
+	public void lueDefaa() {
+		
+		try {
+			Scanner lukija = new Scanner(new File("defadata.csv"));
+			
+			int i = 1;
+			while (lukija.hasNext()) {
+				String[] palat = lukija.nextLine().split(";");
+				if (palat.length == 1) {
+					System.out.println(i);
+				}
+				
+				i++;
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	// LAITTAA DEFAN DATAN PAIKOILLEEN TIETOKANTAAN
-	public void lueDefaTiedosto() {
+	public List<Defaproduct> lueDefaTiedosto() {
+		
+		List<Defaproduct> tuotteet = new ArrayList<>();
+		
 		String tiedosto = "defadata.csv";
 		
 		try {
@@ -60,8 +84,18 @@ public class AutonlampimaksiApplication {
 				String rivi = lukija.nextLine();
 				if (i > 0) {
 					String[] palat = rivi.split(";");
-					if (palat.length != 9) {
-						System.out.println(rivi);
+					if (palat.length == 9) {
+						Defaproduct dp = new Defaproduct();
+						dp.setModel(palat[0]);
+						dp.setModyear(palat[1]);
+						dp.setEnginecode(palat[2]);
+						dp.setEngineheaters(palat[3]);
+						dp.setPlace(palat[4]);
+						dp.setKytkikset(palat[5]);
+						dp.setHaaroitukset(palat[6]);
+						dp.setAika(palat[7]);
+						dp.setEngineheatersMore(palat[8]);
+						tuotteet.add(dp);
 					}
 				}
 				
@@ -70,6 +104,7 @@ public class AutonlampimaksiApplication {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		return tuotteet;
 	}
 	
 	// LATAA 1 TOIMITTAJAN HINNASTON TIETOKANTAAN (TIEDOSTO TALLENNETTU TÄMÄN PROJEKTIN JUUREEN)

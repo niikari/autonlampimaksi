@@ -9,7 +9,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +21,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import palvelinohjelmointi.autonlampimaksi.models.Car;
+import palvelinohjelmointi.autonlampimaksi.models.Enterprise;
+import palvelinohjelmointi.autonlampimaksi.models.User;
+import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseRepository;
 import palvelinohjelmointi.autonlampimaksi.services.CarService;
 import palvelinohjelmointi.autonlampimaksi.services.ParsingService;
 
@@ -28,26 +34,36 @@ public class AutoLampimaksiController {
 	
 	@Autowired
 	private ParsingService parsingService;
-	
+
 	@Autowired
-	private CarService carService;
+	private EnterpriseRepository enterpriseRepository;
 
-
-	
-			
 	
 	@GetMapping("/")
 	public String home(Model model) {
-		Car car = carService.returnCarByRegisterplate("eoo-562");
-		System.out.println(car);			
-		
+		model.addAttribute("enterprise", new Enterprise());
+		model.addAttribute("yritykset", this.enterpriseRepository.findAll());
 		return "index";
 	}
-	
-	@PostMapping("/")
-	public String getCar() {
 		
-		return "redirect:/home";
+	@PostMapping("/addnewenterprise")
+	public String addNewEnterpriseForm(@Validated Enterprise enterprise, BindingResult bd) {
+		Enterprise ent = new Enterprise();
+		if (bd.hasErrors()) {
+			System.out.println("Jokin meni pieleen...");
+		} else {
+			enterpriseRepository.save(enterprise);
+			ent = enterpriseRepository.findByName(enterprise.getName());
+		}
+						
+		return "redirect:/enterprise/" + ent.getEnterpriseId();
+	}
+	
+	@GetMapping("/enterprise/{id}")
+	public String enterprise(@PathVariable Long id, Model model) {
+		model.addAttribute("enterprise", enterpriseRepository.findById(id));
+		model.addAttribute("user", new User());
+		return "enterprise";
 	}
 	
 }

@@ -43,4 +43,8 @@ public class Customer {
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
 	List<Booking> bookings;
+	
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
+	List<Rating> ratings;
 }

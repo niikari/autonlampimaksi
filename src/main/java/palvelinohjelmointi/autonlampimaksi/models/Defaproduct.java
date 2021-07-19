@@ -25,6 +25,14 @@ public class Defaproduct {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long defaproductId;
 	
-	private String defaproductNumber;
+	private String model;
+	private String modyear;
+	private String enginecode;
+	private String engineheaters;
+	private String place;
+	private String kytkikset;
+	private String haaroitukset;
+	private String aika;
+	private String engineheatersMore;
 	
 }

@@ -23,39 +23,37 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: "Playfair Display";
 	letter-spacing: 5px;
 }
+
+li {
+	list-style-type: none;
+}
+
+#map {
+	height: 600px;
+	width: 100%;
+}
 </style>
 <body>
 
 	<!-- Navigaatio -->
-	<div class="w3-top">
+	<div class="w3-top" id="home">
 		<div class="w3-bar w3-white w3-padding w3-card"
 			style="letter-spacing: 4px;">
-			<a href="#home" class="w3-bar-item w3-button">Auto Lämpimäksi</a>
+			<a href="#map" class="w3-bar-item w3-button">Auto Lämpimäksi</a>
 			<!-- Right-sided navbar links. Hide them on small screens -->
 			<div class="w3-right w3-hide-small">
 				<a href="#about" class="w3-bar-item w3-button">About</a> <a
 					href="#menu" class="w3-bar-item w3-button">Haku</a> <a
-					href="#contact" class="w3-bar-item w3-button">Contact</a>
+					href="#rekisteroidy" class="w3-bar-item w3-button">Palveluntarjoaja</a>
 			</div>
 		</div>
 	</div>
 
+	<div id="map"></div>
 	<!-- Kuva -->
 
 
-	<div class="bbbootstrap">
-		<div class="container">
-			<form>
-				<span role="status" aria-live="polite"
-					class="ui-helper-hidden-accessible"></span> <input type="text"
-					id="rekisterinumero" value="" placeholder="Syötä rekkari"
-					role="searchbox" class="InputBox " autocomplete="off"> <input
-					type="submit" id="Form_Go" class="Button" onclick="getCar()"
-					value="Hae">
-
-			</form>
-		</div>
-	</div>
+	
 
 	<!-- Page content -->
 	<div class="w3-content" style="max-width: 1100px">
@@ -125,63 +123,83 @@ document.getElementById("tulos").innerHTML = json;
 		<hr>
 
 		<!-- Contact Section -->
-		<div class="w3-container w3-padding-64" id="contact">
-			<h1>Haluatteko ottaa yhteyttä?</h1>
+		<div class="w3-container w3-padding-64" id="rekisteroidy"
+			th:action="@{/addnewenterprise}" th:object="${enterprise}"
+			method="POST">
+			<h1>Rekisteröidy mukaan!</h1>
 			<br>
 			<p>Haluatteko, että lisäämme teidät palveluntarjoajiin.</p>
 			<p class="w3-text-blue-grey w3-large">
-				<b>Haaga-Helia Pasila, Helsinki</b>
+				<b>Dragon Flame Oy</b>
 			</p>
-			<p>Laita viestiii</p>
-			<form action="/action_page.php" target="_blank">
+			<p>Liittyminen on nopeaa ja helppoa!</p>
+			<form th:action="@{/addnewenterprise}" th:object="${enterprise}"
+				method="POST">
 				<p>
 					<input class="w3-input w3-padding-16" type="text"
-						placeholder="Name" required name="Name">
-				</p>
-				<p>
-					<input class="w3-input w3-padding-16" type="number"
-						placeholder="How many people" required name="People">
-				</p>
-				<p>
-					<input class="w3-input w3-padding-16" type="datetime-local"
-						placeholder="Date and time" required name="date"
-						value="2020-11-16T20:00">
+						th:field="*{name}" placeholder="Mönttösen asennuspiste Oy">
 				</p>
 				<p>
 					<input class="w3-input w3-padding-16" type="text"
-						placeholder="Message \ Special requirements" required
-						name="Message">
+						th:field="*{address}" placeholder="Katusosoite">
 				</p>
 				<p>
-					<button class="w3-button w3-light-grey w3-section" type="submit" onclick="testi()">SEND
-						MESSAGE</button>
+					<input class="w3-input w3-padding-16" type="text"
+						th:field="*{postCode}" placeholder="Postinumero">
+				</p>
+				<p>
+					<input class="w3-input w3-padding-16" type="text"
+						placeholder="Kaupunki" th:field="*{city}">
+				</p>
+				<p>
+					<button class="w3-button w3-light-grey w3-section" type="submit">Jatka rekisteröintiä</button>
 				</p>
 			</form>
 		</div>
 
 		<!-- End page content -->
+		<div class="w3-container w3-padding-64" id="contact">
+			<h3>Mukana tarjoamassa asennuksia:</h3>
+			<ul>
+				<li th:each="yritys : ${yritykset}">
+					<div class="card w-75">
+						<div class="card-body">
+							<h5 class="card-title" th:text="${yritys.name}"></h5>
+							<p class="card-text" th:text="${yritys.address}"></p>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<!-- Footer -->
+		<footer class="w3-center w3-light-grey w3-padding-32">
+			<p>Jos halutaan vielä footer - halutaanhan me :)</p>
+		</footer>
+
+
+
+		<!-- <div class="card w-75">
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+    <a href="#" class="btn btn-primary">Button</a>
+  </div>
+</div> -->
+
+
+
 	</div>
-
-	<!-- Footer -->
-	<footer class="w3-center w3-light-grey w3-padding-32">
-		<p>Jos halutaan vielä footer</p>
-	</footer>
-
-
-
-
-
-
-
-
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
 		crossorigin="anonymous"></script>
-		
+
 	<script th:src="@{/js/script.js}"></script>
 
+	<script async
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEdh7HpK05qAm0kRzYeV3YNH3PynQdkxE&callback=initMap">
+</script>
 </body>
 </html>
 

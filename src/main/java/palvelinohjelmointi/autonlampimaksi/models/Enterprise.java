@@ -29,6 +29,10 @@ public class Enterprise {
 	@Column(name="name", nullable=false, unique=true)
 	private String name;
 	
+	private String address;
+	private String postCode;
+	private String city;
+	
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
 	List<User> users;
@@ -45,7 +49,8 @@ public class Enterprise {
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
 	List<Booking> bookings;
 	
-	public Enterprise(String name) {
-		this.name = name;
-	}
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
+	List<Rating> ratings;
+	
 }
