@@ -77,7 +77,7 @@ document.getElementById("tulos").innerHTML = json;
 
 
 
-		<p id="tulos"></p>
+		<p id="err" th:text="${nameerror}"></p>
 
 
 
@@ -133,6 +133,8 @@ document.getElementById("tulos").innerHTML = json;
 				<b>Dragon Flame Oy</b>
 			</p>
 			<p>Liittyminen on nopeaa ja helppoa!</p>
+			<p><b>Olet jo mukana? Kirjaudu siis sisään</b></p>
+			<!--  
 			<form th:action="@{/addnewenterprise}" th:object="${enterprise}"
 				method="POST">
 				<p>
@@ -151,8 +153,10 @@ document.getElementById("tulos").innerHTML = json;
 					<input class="w3-input w3-padding-16" type="text"
 						placeholder="Kaupunki" th:field="*{city}">
 				</p>
+				-->
 				<p>
-					<button class="w3-button w3-light-grey w3-section" type="submit">Jatka rekisteröintiä</button>
+					<a href="/rekisterointi" class="w3-button w3-light-grey w3-section" type="submit">Rekisteröidy</a>
+					<a href="/login" class="w3-button w3-light-grey w3-section" type="submit">Kirjaudu</a>
 				</p>
 			</form>
 		</div>

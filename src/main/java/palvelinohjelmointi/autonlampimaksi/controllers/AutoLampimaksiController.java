@@ -45,25 +45,37 @@ public class AutoLampimaksiController {
 		model.addAttribute("yritykset", this.enterpriseRepository.findAll());
 		return "index";
 	}
-		
+			
 	@PostMapping("/addnewenterprise")
 	public String addNewEnterpriseForm(@Validated Enterprise enterprise, BindingResult bd) {
 		Enterprise ent = new Enterprise();
 		if (bd.hasErrors()) {
-			System.out.println("Jokin meni pieleen...");
+			return "/enterprise";
 		} else {
 			enterpriseRepository.save(enterprise);
-			ent = enterpriseRepository.findByName(enterprise.getName());
+			ent = enterpriseRepository.findByName(enterprise.getName());			
 		}
 						
 		return "redirect:/enterprise/" + ent.getEnterpriseId();
 	}
 	
 	@GetMapping("/enterprise/{id}")
-	public String enterprise(@PathVariable Long id, Model model) {
-		model.addAttribute("enterprise", enterpriseRepository.findById(id));
+	public String enterpriseUser(Model model, @PathVariable Long id) {
 		model.addAttribute("user", new User());
+		model.addAttribute("enterprise", enterpriseRepository.findById(id));
+		
+		return "enterpriseuser";
+	}
+
+	
+	// REKISTERÖINTI
+	@GetMapping("/rekisterointi")
+	public String enterpriseRegister(Model model) {
+		model.addAttribute("enterprise", new Enterprise());
 		return "enterprise";
 	}
+	
+	
+	// LOGIN
 	
 }

@@ -45,12 +45,12 @@ h1, h2, h3, h4, h5, h6 {
 	<div class="w3-container w3-padding-64" id="rekisteroidy"
 			th:action="@{/addnewenterprise}" th:object="${enterprise}"
 			method="POST">
-			<h1>Kiva kun päätit liittyä. Tervetuloa!</h1>
+			<h1>Sitten vielä määritellään käyttäjiä yrityksellesi</h1>
 			<div><p>Tähän voisi laittaa mitä vaiheita rekisteröinti sisältää...</p></div>
 			<br>
 			<p><b></b></p>
 			
-			<form th:action="@{/addnewenterprise}" th:object="${enterprise}"
+			<form th:action="@{/addnewuser}" th:object="${user}"
 				method="POST">
 				<p>
 					<input class="w3-input w3-padding-16" type="text"
