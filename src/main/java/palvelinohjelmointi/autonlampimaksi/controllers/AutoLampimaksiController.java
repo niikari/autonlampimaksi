@@ -38,6 +38,10 @@ public class AutoLampimaksiController {
 	@Autowired
 	private EnterpriseRepository enterpriseRepository;
 
+	@RequestMapping(value="/login")
+    public String login() {	
+        return "login";
+	}
 	
 	@GetMapping("/")
 	public String home(Model model) {
