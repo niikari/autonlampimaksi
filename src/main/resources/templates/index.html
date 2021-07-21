@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="css/muoto.css">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="fontawesome-free-5.15.1/css/all.css">
+ <script src="https://kit.fontawesome.com/afd6aa68df.js" crossorigin="anonymous"></script>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
 	rel="stylesheet"
@@ -43,7 +45,7 @@ li {
 			<!-- Right-sided navbar links. Hide them on small screens -->
 			<div class="w3-right w3-hide-small">
 				<a href="#about" class="w3-bar-item w3-button">About</a> <a
-					href="#menu" class="w3-bar-item w3-button">Haku</a> <a
+					href="#haku" class="w3-bar-item w3-button">Haku</a> <a
 					href="#rekisteroidy" class="w3-bar-item w3-button">Palveluntarjoaja</a>
 			</div>
 		</div>
@@ -58,21 +60,7 @@ li {
 	<!-- Page content -->
 	<div class="w3-content" style="max-width: 1100px">
 
-		<script type="text/javascript">
-function rekisteriHaku(){
-var reksiterinumero = document.getElementById("Form_Search").value;
-var apiPromise = fetch(`/cars/{rekisterinumero}`, {
-    method: 'GET'
-});
-apiPromise.then(async (response)=>{
-var data = await response.json();
-console.log(data);
-const json = JSON.stringify(data);
-document.getElementById("tulos").innerHTML = json;
-});
-}
-	
-</script>
+		
 
 
 
@@ -101,13 +89,22 @@ document.getElementById("tulos").innerHTML = json;
 		<hr>
 
 		<!-- Menu Section -->
-		<div class="w3-row w3-padding-64" id="menu">
+		<div class="w3-row w3-padding-64" id="haku">
 			<div class="w3-col l6 w3-padding-large">
 				<h1 class="w3-center"></h1>
 				<br>
-				<h4>Väliotsikko</h4>
-				<p class="w3-text-grey">Jotain jotain jotain</p>
+				<h4>Hae rekisterinumerolla</h4>
+				<p class="w3-large">Syötä alle autosti rekisterinumero ja saat tuloksena autollesi sopivan lämmityksen, sekä asennuspisteen</p>
 				<br>
+		
+
+
+<input id="mySearchField" name="search" placeholder="Syötä rekisterikilpi.." type="text">
+
+  <input type="submit" id="Form_Go" class="Button" onclick="rekisteriHaku()" value="Hae">
+
+
+  <p id="tulos"></p>
 
 
 			</div>
