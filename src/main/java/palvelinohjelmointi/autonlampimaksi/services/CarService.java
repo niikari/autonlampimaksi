@@ -40,21 +40,11 @@ public class CarService {
 	}
 	
 	public List<Defaproduct> getDefaproductsByCar(Car car) {
-		List<Defaproduct> products = defaRepository.findByEnginecodeAndModyear(car.getDevaEngineCode(), car.getModyear());
+		List<Defaproduct> products = defaRepository.findByEnginecodeAndModyearAndEngineheaters(car.getDevaEngineCode(), car.getModyear(), car.getEngineheater());
 				
 		return products;
 	}
 	
-	public String testi(String toinen) {
-		return "Testiä puskee " + toinen;
-	}
-	
-	public void SaveCarIfNotSaved(Car car) {
-		if (carRepository.findCarByPlate(car.getPlate()) == null) {
-			carRepository.save(car);
-		}
-		
-	}
 	
 	public Car getCarByRegisterplate(String plate) {
 		
@@ -84,7 +74,7 @@ public class CarService {
 					sana = sana.replace("}", "");
 					sana = sana.replace("]", "");
 					sana = sana.replace(" ", "");
-					System.out.println(sana);
+					//System.out.println(sana);
 					//sana = sana.replace("-", "");
 					
 					String[] j = sana.split("=");

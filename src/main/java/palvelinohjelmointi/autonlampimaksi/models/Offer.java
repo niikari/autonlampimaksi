@@ -35,4 +35,5 @@ public class Offer {
 	@JoinColumn(name="carId")
 	private Car car;
 	
+	
 }

@@ -38,11 +38,9 @@ const naytaAuto = (auto) => {
 
 	let showingCar = `<div class="card" style="width: 18rem;">
   <div class="card-body">
-    <h5 class="card-title">${myobj.make}</h5>
-    <h6 class="card-subtitle mb-2 text-muted">${myobj.model}</h6>
-    <p class="card-text">${myobj.modyear}</p>
-    <a href="#" class="card-link">Card link</a>
-    <a href="#" class="card-link">Another link</a>
+    <h5 class="card-title"><b>${myobj.make} ${myobj.model}</b></h5>
+    <p class="card-text">Vuosimalli: ${myobj.modyear}</p>
+    <a href="/list/${myobj.plate}" class="card-link">Lähde valitsemaan sopivaa asennuspaikkaa</a>
   </div>
 </div>`;
 	

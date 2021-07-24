@@ -92,18 +92,22 @@ public class AutoLampimaksiController {
 	@GetMapping("/list/{rek}")
 	public String chooseEnterpriseByPrice(Model model, @PathVariable String rek) {
 		model.addAttribute("offer", new Offer());
-		Car car = carService.getCarByRegisterplate(rek);
 		
-		carService.SaveCarIfNotSaved(car);
-				
+		// TÄÄLTÄ TULEE ERRORIA, MUTTA TOIMII - TUO NULL ARVO HÄIRITSEE (EN TIEDÄ TARKALLEEN MISTÄ JOHTUU)
+		if (carRepository.findCarByPlate(rek) == null) {
+			carRepository.save(carService.getCarByRegisterplate(rek));
+		} 
+			
 		List<Defaproduct> productsFit = carService.getDefaproductsByCar(carRepository.findCarByPlate(rek));
 			
 		for (Enterprise enterprise : enterpriseRepository.findAll()) {
 			offerService.newOffer(enterprise, productsFit, carRepository.findCarByPlate(rek));
 		}
 		
+		List<String> parts = offerService.getPartsOfTheOffer(productsFit.get(0));
 				
-		model.addAttribute("offers", offerRepository.findAll());
+		model.addAttribute("offers", offerRepository.findByCar(carRepository.findCarByPlate(rek)));
+		model.addAttribute("parts", parts);
 		
 		return "list";
 	}

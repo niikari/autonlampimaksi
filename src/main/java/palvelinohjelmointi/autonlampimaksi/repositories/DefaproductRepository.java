@@ -8,5 +8,5 @@ import palvelinohjelmointi.autonlampimaksi.models.Defaproduct;
 
 public interface DefaproductRepository extends CrudRepository<Defaproduct, Long> {
 	
-	List<Defaproduct> findByEnginecodeAndModyear(String enginecode, String modyear);
+	List<Defaproduct> findByEnginecodeAndModyearAndEngineheaters(String enginecode, String modyear, String engineheaters);
 }
