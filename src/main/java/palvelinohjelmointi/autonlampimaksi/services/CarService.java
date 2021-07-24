@@ -1,6 +1,7 @@
 package palvelinohjelmointi.autonlampimaksi.services;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import palvelinohjelmointi.autonlampimaksi.models.Car;
+import palvelinohjelmointi.autonlampimaksi.models.Defaproduct;
 import palvelinohjelmointi.autonlampimaksi.repositories.CarRepository;
+import palvelinohjelmointi.autonlampimaksi.repositories.DefaproductRepository;
 
 @Service
 public class CarService {
@@ -22,6 +25,9 @@ public class CarService {
 	
 	@Autowired
 	private CarRepository carRepository;
+	
+	@Autowired
+	private DefaproductRepository defaRepository;
 	
 	// For consept of proof! => should be changed to payd service
 	// private String url = "https://secure.defa.com/api/eh/searchregm/?regid=";
@@ -33,11 +39,26 @@ public class CarService {
 		return cars;
 	}
 	
+	public List<Defaproduct> getDefaproductsByCar(Car car) {
+		List<Defaproduct> products = defaRepository.findByEnginecodeAndModyear(car.getDevaEngineCode(), car.getModyear());
+				
+		return products;
+	}
+	
 	public String testi(String toinen) {
 		return "Testiä puskee " + toinen;
 	}
 	
-	public Car returnCarByRegisterplate(String plate) {
+	public void SaveCarIfNotSaved(Car car) {
+		if (carRepository.findCarByPlate(car.getPlate()) == null) {
+			carRepository.save(car);
+		}
+		
+	}
+	
+	public Car getCarByRegisterplate(String plate) {
+		
+		
 		ObjectMapper objectMapper = new ObjectMapper();
 		Car car = new Car();
 		Map<String, Object> map = new HashMap<>();
@@ -68,25 +89,25 @@ public class CarService {
 					
 					String[] j = sana.split("=");
 					if (j[0].equals("make")) {
-						car.setMake(j[1]);						
+						car.setMake(j[1].trim());						
 					}
 					if (j[0].equals("model")) {
-						car.setModel(j[1]);
+						car.setModel(j[1].trim());
 					}
 					if (j[0].equals("engine")) {
-						car.setEngine(j[1]);
+						car.setEngine(j[1].trim());
 					}
 					if (j[0].equals("fuel")) {
-						car.setFuel(j[1]);
+						car.setFuel(j[1].trim());
 					}
 					if (j[0].equals("modyear")) {
-						car.setModyear(j[1]);
+						car.setModyear(j[1].trim());
 					} 
 					if (j[0].equals("engineheater")) {
-						car.setEngineheater(j[1]);
+						car.setEngineheater(j[1].trim());
 					}
 					if (j[0].equals("enginecode")) {
-						car.setDevaEngineCode(j[1]);
+						car.setDevaEngineCode(j[1].trim());
 					}
 					car.setPlate(plate);
 				}
@@ -94,14 +115,9 @@ public class CarService {
 			
 			i++;
 		}
-		try {
-			this.carRepository.save(car);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Auto kyseisellä rekisterinumerolla jo olemassa!");
-		}
-		
 		
 		return car;
+		
+		
 	}
 }

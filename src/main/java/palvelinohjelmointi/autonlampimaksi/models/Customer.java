@@ -30,11 +30,7 @@ public class Customer {
 	private String custAddress;
 	private String custPostcode;
 	private String custCity;
-	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
-	List<EnterpriseCustomer> enterpriseCustomers;
-	
+
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
 	List<Car> cars;

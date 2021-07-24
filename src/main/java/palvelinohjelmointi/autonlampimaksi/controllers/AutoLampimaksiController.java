@@ -2,9 +2,11 @@ package palvelinohjelmointi.autonlampimaksi.controllers;
 
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,10 +23,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import palvelinohjelmointi.autonlampimaksi.models.Car;
+import palvelinohjelmointi.autonlampimaksi.models.Defaproduct;
 import palvelinohjelmointi.autonlampimaksi.models.Enterprise;
+import palvelinohjelmointi.autonlampimaksi.models.Offer;
 import palvelinohjelmointi.autonlampimaksi.models.User;
+import palvelinohjelmointi.autonlampimaksi.repositories.CarRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseRepository;
+import palvelinohjelmointi.autonlampimaksi.repositories.OfferRepository;
+import palvelinohjelmointi.autonlampimaksi.repositories.UserRepository;
 import palvelinohjelmointi.autonlampimaksi.services.CarService;
+import palvelinohjelmointi.autonlampimaksi.services.OfferService;
 import palvelinohjelmointi.autonlampimaksi.services.ParsingService;
 
 @Controller
@@ -37,11 +45,27 @@ public class AutoLampimaksiController {
 
 	@Autowired
 	private EnterpriseRepository enterpriseRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private CarService carService;
+	
+	@Autowired
+	private OfferService offerService;
+	
+	@Autowired
+	private OfferRepository offerRepository;
+	
+	@Autowired
+	private CarRepository carRepository;
 
 	@RequestMapping(value="/login")
     public String login() {	
         return "login";
 	}
+	
 	
 	@GetMapping("/")
 	public String home(Model model) {
@@ -63,12 +87,47 @@ public class AutoLampimaksiController {
 		return "redirect:/enterprise/" + ent.getEnterpriseId();
 	}
 	
+	// TARJOUKSIEN NÄYTTÄMINEN ASIAKKAALLE - UUSI HTML SIVU LIST.HTML
+	// LUOKKA TARJOUS => TALLENNETAAN JOKAINEN ANNETTU TARJOUS... EHKÄ? :)
+	@GetMapping("/list/{rek}")
+	public String chooseEnterpriseByPrice(Model model, @PathVariable String rek) {
+		model.addAttribute("offer", new Offer());
+		Car car = carService.getCarByRegisterplate(rek);
+		
+		carService.SaveCarIfNotSaved(car);
+				
+		List<Defaproduct> productsFit = carService.getDefaproductsByCar(carRepository.findCarByPlate(rek));
+			
+		for (Enterprise enterprise : enterpriseRepository.findAll()) {
+			offerService.newOffer(enterprise, productsFit, carRepository.findCarByPlate(rek));
+		}
+		
+				
+		model.addAttribute("offers", offerRepository.findAll());
+		
+		return "list";
+	}
+	
 	@GetMapping("/enterprise/{id}")
 	public String enterpriseUser(Model model, @PathVariable Long id) {
 		model.addAttribute("user", new User());
 		model.addAttribute("enterprise", enterpriseRepository.findById(id));
-		
+				
 		return "enterpriseuser";
+	}
+	
+	@PostMapping("/enterprise/{id}")
+	public String addNewUser(@Validated User user, BindingResult bd, @PathVariable Long id) {
+		if (bd.hasErrors()) {
+			return "redirect:/enterprise/" + id;
+		}
+		
+		//userRepository.save(user);
+		Enterprise ent = enterpriseRepository.findById(id).get();
+		user.setEnterprise(ent);
+		userRepository.save(user);
+		
+		return "redirect:/";
 	}
 
 	

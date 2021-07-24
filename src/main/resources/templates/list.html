@@ -24,6 +24,14 @@ h1, h2, h3, h4, h5, h6 {
 	letter-spacing: 5px;
 }
 
+.card {
+	margin-top: 100px;
+}
+
+li {
+	list-style-type: none;
+}
+
 </style>
 <body>
 
@@ -40,36 +48,34 @@ h1, h2, h3, h4, h5, h6 {
 		</div>
 	</div>
 	
-	
+	<!-- TÄHÄN KOHTAAN TARJOUKSIA YRITYKSILTÄ -->
+	<ul>
+		<li th:each="offer : ${offers}">
+			<div class="card" style="width: 18rem;">
+				<img src="..." class="card-img-top" alt="...">
+				<div class="card-body">
+					<h5 class="card-title" th:text="${offer.enterprise.name}" >Card title</h5>
+					<p class="card-text">Hinta asennukselle yhteensä: <b><span th:text="${offer.totalPrice}"></span></b><br>
+					Asennetaan seuraavat tuotteet:</p>
+				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">An item</li>
+					<li class="list-group-item">A second item</li>
+					<li class="list-group-item">A third item</li>
+				</ul>
+				<div class="card-body">
+					<a href="#" class="card-link">Card link</a> <a href="#"
+						class="card-link">Another link</a>
+				</div>
+			</div>
+		</li>
 
-	<div class="w3-container w3-padding-64" id="rekisteroidy"
-			th:action="@{/addnewenterprise}" th:object="${enterprise}"
-			method="POST">
-			<h1>Sitten vielä määritellään käyttäjä yrityksellesi</h1>
-			<div><p>Tähän voisi laittaa mitä vaiheita rekisteröinti sisältää...</p></div>
-			<br>
-			<p><b></b></p>
-			
-			<form th:object="${user}"
-				method="POST">
-				<p>
-					<input class="w3-input w3-padding-16" type="text"
-						th:field="*{username}" placeholder="Käyttäjänimi">
-				</p>
-				<p>
-					<input class="w3-input w3-padding-16" type="text"
-						th:field="*{passwordHash}" placeholder="Salasana">
-				</p>
-				<p>
-					<input class="w3-input w3-padding-16" type="text"
-						th:field="*{role}" placeholder="Rooli">
-				</p>				
-				<p>
-					<button class="w3-button w3-light-grey w3-section" type="submit">Jatka</button>
-				</p>
-			</form>
-		</div>
-	
+	</ul>
+
+
+
+
+
 	<!-- Footer -->
 	<footer class="w3-center w3-light-grey w3-padding-32">
 		<p>Jos halutaan vielä footer - halutaanhan me :)</p>

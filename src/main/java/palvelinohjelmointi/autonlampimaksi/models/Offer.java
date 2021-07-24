@@ -15,18 +15,24 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnterpriseSupplier {
-
+public class Offer {
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long enterpriseSupplierId;
+	private Long offerId;
+	
+	private double totalPrice;
+
+	@ManyToOne
+	@JoinColumn(name="defaproductId")
+	private Defaproduct product;
 	
 	@ManyToOne
 	@JoinColumn(name="enterpriseId")
 	private Enterprise enterprise;
 	
 	@ManyToOne
-	@JoinColumn(name="supplierId")
-	private Supplier supplier;
+	@JoinColumn(name="carId")
+	private Car car;
 	
 }

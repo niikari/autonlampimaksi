@@ -33,18 +33,15 @@ public class Enterprise {
 	private String postCode;
 	private String city;
 	
+	private double hourRate = 50;
+	private double discountHourRate = 0;
+	private double discountParts = 0;
+	private double timeToInnerCable = 1;
+	
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
 	List<User> users;
-	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
-	List<EnterpriseSupplier> suppliers;
-	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
-	List<EnterpriseCustomer> enterpriseCustomers;
-	
+
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
 	List<Booking> bookings;
@@ -52,5 +49,9 @@ public class Enterprise {
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
 	List<Rating> ratings;
+	
+	@JsonIgnore
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
+	List<Offer> offers;
 	
 }

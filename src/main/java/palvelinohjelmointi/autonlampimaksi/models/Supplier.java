@@ -30,16 +30,9 @@ public class Supplier {
 	
 	@Column(name="supplierName", nullable=false)
 	private String name;
-	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="supplier")
-	List<EnterpriseSupplier> enterpriseSuppliers;
-	
+
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="supplier")
 	List<SupplierPrice> prices;
 	
-	public Supplier(String name) {
-		this.name=name;
-	}
 }

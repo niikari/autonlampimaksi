@@ -32,7 +32,7 @@ public class Rating {
 	private Customer customer;
 	
 	public void setRating(int rating) {
-		if (rating <= 5 && rating >= 0 && rating % rating == 0) {
+		if (rating <= 5 && rating >= 0) {
 			this.rating = rating;
 		}
 	}

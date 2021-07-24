@@ -17,15 +17,16 @@ function initMap() {
 	});
 }
 
-function rekisteriHaku(){
-var rekisterinumero = document.getElementById("mySearchField").value;
-var apiPromise = fetch(`/cars/` + rekisterinumero, {
-    method: 'GET'
-});
-apiPromise.then(async (response)=>{
-var data = await response.json();
-console.log(data);
-const json = JSON.stringify(data);
-document.getElementById("tulos").innerHTML = json;
-});
+function rekisteriHaku() {
+	var rekisterinumero = document.getElementById("mySearchField").value;
+	var apiPromise = fetch(`/cars/` + rekisterinumero, {
+		method: 'GET'
+	});
+	apiPromise.then(async (response) => {
+		var data = await response.json();
+		console.log(data);
+		const json = JSON.stringify(data);
+		document.getElementById("tulos").innerHTML = json;
+	});
+	// VOISI LÄHETTÄÄ TUON AUTON EHKÄ SUORAAN PALVELIMELLE KÄSITELTÄVÄKSI?
 }

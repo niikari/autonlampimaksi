@@ -15,18 +15,13 @@ import palvelinohjelmointi.autonlampimaksi.models.Car;
 import palvelinohjelmointi.autonlampimaksi.models.Customer;
 import palvelinohjelmointi.autonlampimaksi.models.Defaproduct;
 import palvelinohjelmointi.autonlampimaksi.models.Enterprise;
-import palvelinohjelmointi.autonlampimaksi.models.EnterpriseCustomer;
-import palvelinohjelmointi.autonlampimaksi.models.EnterpriseSupplier;
 import palvelinohjelmointi.autonlampimaksi.models.Supplier;
 import palvelinohjelmointi.autonlampimaksi.models.SupplierPrice;
 import palvelinohjelmointi.autonlampimaksi.models.User;
 import palvelinohjelmointi.autonlampimaksi.repositories.CarRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.CustomerRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.DefaproductRepository;
-import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseCustomerRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseRepository;
-import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseSupplierRepository;
-import palvelinohjelmointi.autonlampimaksi.repositories.SupplierPriceRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.SupplierRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.UserRepository;
 import palvelinohjelmointi.autonlampimaksi.services.CarService;
@@ -43,69 +38,52 @@ public class AutonlampimaksiApplication {
 		return (args) -> {
 			//BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();		
 			//System.out.println(lueDefaTiedosto().size());
-			lueDefaa();
+			List<Defaproduct> kamat= lueDefaa();
+			for (Defaproduct dp : kamat) {
+				defaproductRepository.save(dp);
+			}
 		};
 		
 		
 	}
 	
-	public void lueDefaa() {
-		
+	// LUKEE DEFATIEDOSTON JA PALAUTTAA VAIN 610 RIVIÄ, ENKÄ TAJUA MIKSI (MUTTA TESTIKSI RIITTÄÄ NYT)
+	public List<Defaproduct> lueDefaa() {
+		List<Defaproduct> kamat = new ArrayList<>();
 		try {
 			Scanner lukija = new Scanner(new File("defadata.csv"));
 			
-			int i = 1;
+			
 			while (lukija.hasNext()) {
-				String[] palat = lukija.nextLine().split(";");
-				if (palat.length == 1) {
-					System.out.println(i);
+				String rivi = lukija.nextLine();
+				String[] palat = rivi.split(";");
+				if (palat.length == 9) {
+					Defaproduct dp = new Defaproduct();
+					dp.setModel(palat[0].trim());
+					dp.setModyear(palat[1].trim());
+					dp.setEnginecode(palat[2].trim());
+					dp.setEngineheaters(palat[3].trim());
+					dp.setPlace(palat[4].trim());
+					dp.setKytkikset(palat[5].trim());
+					dp.setHaaroitukset(palat[6].trim());
+					dp.setAika(palat[7].trim());
+					if (!palat[8].equals("tyhja")) {
+						dp.setEngineheatersMore(palat[8].trim());
+					}
+					kamat.add(dp);
 				}
-				
-				i++;
 			}
+						
 			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return kamat;
 	}
 	
-	// LAITTAA DEFAN DATAN PAIKOILLEEN TIETOKANTAAN
-	public List<Defaproduct> lueDefaTiedosto() {
-		
-		List<Defaproduct> tuotteet = new ArrayList<>();
-		
-		String tiedosto = "defadata.csv";
-		
-		try {
-			Scanner lukija = new Scanner(new File(tiedosto));
-			int i = 0;
-			while (lukija.hasNext()) {
-				String rivi = lukija.nextLine();
-				if (i > 0) {
-					String[] palat = rivi.split(";");
-					if (palat.length == 9) {
-						Defaproduct dp = new Defaproduct();
-						dp.setModel(palat[0]);
-						dp.setModyear(palat[1]);
-						dp.setEnginecode(palat[2]);
-						dp.setEngineheaters(palat[3]);
-						dp.setPlace(palat[4]);
-						dp.setKytkikset(palat[5]);
-						dp.setHaaroitukset(palat[6]);
-						dp.setAika(palat[7]);
-						dp.setEngineheatersMore(palat[8]);
-						tuotteet.add(dp);
-					}
-				}
-				
-				i++;
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return tuotteet;
-	}
+
 	
 	// LATAA 1 TOIMITTAJAN HINNASTON TIETOKANTAAN (TIEDOSTO TALLENNETTU TÄMÄN PROJEKTIN JUUREEN)
 	public void lueOrumHinnastoTiedosto() {

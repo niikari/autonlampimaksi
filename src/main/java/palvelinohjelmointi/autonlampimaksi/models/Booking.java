@@ -1,5 +1,8 @@
 package palvelinohjelmointi.autonlampimaksi.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +23,9 @@ public class Booking {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long bookingId;
+	
+	// MITÄ TAVAROITA TARVITAAN, MONEN SUHDE MONEEN DEFAPRODUCT TAULUN KANSSA
+	//private List<Defaproduct> productsIncluded = new ArrayList<>();
 	
 	@ManyToOne
 	@JoinColumn(name="customerid")

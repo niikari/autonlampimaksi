@@ -8,5 +8,4 @@ import palvelinohjelmointi.autonlampimaksi.models.Enterprise;
 @RepositoryRestResource
 public interface EnterpriseRepository extends CrudRepository<Enterprise, Long> {
 	Enterprise findByName(String name);
-
 }

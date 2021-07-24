@@ -46,6 +46,7 @@ public class Car {
 	@JoinColumn(name="customerid")
 	private Customer customer;
 
-	
+	@OneToMany(cascade=CascadeType.ALL,mappedBy="car")
+	List<Offer> offers;
 		
 }
