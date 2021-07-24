@@ -17,9 +17,12 @@ public class OfferService {
 	
 	@Autowired
 	private OfferRepository offerRepository;
-
-	@Autowired
-	private DefaproductRepository defaRepository;
+	
+	public void saveOfferIfNotSaved(Offer offer) {
+		if (offerRepository.findByCarAndEnterprise(offer.getCar(), offer.getEnterprise())== null) {
+			offerRepository.save(offer);
+		}
+	}
 	
 	public void newOffer(Enterprise enterprise, List<Defaproduct> products, Car car) {
 		Offer offer = new Offer();
@@ -37,7 +40,7 @@ public class OfferService {
 		offer.setTotalPrice(enterprise.getHourRate() * time);
 		offer.setCar(car);
 		
-		offerRepository.save(offer);
+		saveOfferIfNotSaved(offer);
 	}
 
 }

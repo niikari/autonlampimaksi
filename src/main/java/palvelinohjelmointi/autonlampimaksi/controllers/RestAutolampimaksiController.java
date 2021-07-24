@@ -49,12 +49,12 @@ public class RestAutolampimaksiController {
 	}
 	//ss
 	
-	/*
+	
 	@GetMapping("/cars/{plate}")
 	@ResponseBody
 	public Car returnACarByLicense(@PathVariable(name="plate") String plate) {
-		return this.carService.returnCarByRegisterplate(plate);		
-	}*/
+		return this.carService.getCarByRegisterplate(plate);		
+	}
 	
 	@GetMapping("/cars")
 	@ResponseBody

@@ -26,7 +26,26 @@ function rekisteriHaku() {
 		var data = await response.json();
 		console.log(data);
 		const json = JSON.stringify(data);
-		document.getElementById("tulos").innerHTML = json;
+		naytaAuto(json);
+		document.getElementById("autontiedot").innerHTML = json;
 	});
 	// VOISI LÄHETTÄÄ TUON AUTON EHKÄ SUORAAN PALVELIMELLE KÄSITELTÄVÄKSI?
+}
+
+const naytaAuto = (auto) => {
+
+	const myobj = JSON.parse(auto);
+
+	let showingCar = `<div class="card" style="width: 18rem;">
+  <div class="card-body">
+    <h5 class="card-title">${myobj.make}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">${myobj.model}</h6>
+    <p class="card-text">${myobj.modyear}</p>
+    <a href="#" class="card-link">Card link</a>
+    <a href="#" class="card-link">Another link</a>
+  </div>
+</div>`;
+	
+	document.getElementById("tulos").innerHTML = showingCar;
+
 }
