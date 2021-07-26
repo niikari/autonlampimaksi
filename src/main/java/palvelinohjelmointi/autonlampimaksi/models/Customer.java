@@ -3,6 +3,7 @@ package palvelinohjelmointi.autonlampimaksi.models;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,16 +31,15 @@ public class Customer {
 	private String custAddress;
 	private String custPostcode;
 	private String custCity;
+	private String phone;
+	
+	@Column(name="email", nullable=false, unique=true)
+	private String email;
 
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
-	List<Car> cars;
-	
-	
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
-	List<Booking> bookings;
-	
+	List<Car> cars;	
+
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
 	List<Rating> ratings;

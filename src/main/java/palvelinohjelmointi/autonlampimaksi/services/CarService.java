@@ -41,7 +41,7 @@ public class CarService {
 	
 	public List<Defaproduct> getDefaproductsByCar(Car car) {
 		List<Defaproduct> products = defaRepository.findByEnginecodeAndModyearAndEngineheaters(car.getDevaEngineCode(), car.getModyear(), car.getEngineheater());
-				
+		
 		return products;
 	}
 	

@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,14 +25,8 @@ public class Booking {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long bookingId;
 	
-	// MITÄ TAVAROITA TARVITAAN, MONEN SUHDE MONEEN DEFAPRODUCT TAULUN KANSSA
-	//private List<Defaproduct> productsIncluded = new ArrayList<>();
-	
-	@ManyToOne
-	@JoinColumn(name="customerid")
-	private Customer customer;
-	
-	@ManyToOne
-	@JoinColumn(name="enterpriseId")
-	private Enterprise enterprise;
+	@OneToOne
+	@JoinColumn(name="offerid")
+	private Offer offer;
+
 }

@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,5 +36,6 @@ public class Offer {
 	@JoinColumn(name="carId")
 	private Car car;
 	
-	
+	@OneToOne(mappedBy="offer")
+	private Booking booking;
 }

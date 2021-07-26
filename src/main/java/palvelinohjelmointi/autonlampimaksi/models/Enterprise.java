@@ -38,14 +38,12 @@ public class Enterprise {
 	private double discountParts = 0;
 	private double timeToInnerCable = 1;
 	
+	private int freeInDays = 2;
+	
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
 	List<User> users;
 
-	@JsonIgnore
-	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
-	List<Booking> bookings;
-	
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="enterprise")
 	List<Rating> ratings;

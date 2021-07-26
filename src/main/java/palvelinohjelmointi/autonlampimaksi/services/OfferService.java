@@ -24,7 +24,7 @@ public class OfferService {
 		}
 	}
 	
-	public void newOffer(Enterprise enterprise, List<Defaproduct> products, Car car) {
+	public Offer newOffer(Enterprise enterprise, List<Defaproduct> products) {
 		Offer offer = new Offer();
 		offer.setEnterprise(enterprise);
 		// VOISI KATSOA MIKÄ ON KALLEIN PAKETTI JA VALITA SEN... USEAMPI VAIHTOEHTO MAHDOLLINEN (ILMAN AUTON MALLIA)
@@ -40,9 +40,9 @@ public class OfferService {
 		}
 		// HINTA ON VIELÄ VAIN TYÖNVELOITUS
 		offer.setTotalPrice(enterprise.getHourRate() * time + enterprise.getTimeToInnerCable() * enterprise.getHourRate());
-		offer.setCar(car);
-		
-		saveOfferIfNotSaved(offer);
+		//offer.setCar(car);
+		return offer;
+		//saveOfferIfNotSaved(offer);
 	}
 	
 	public List<String> getPartsOfTheOffer(Defaproduct dp) {

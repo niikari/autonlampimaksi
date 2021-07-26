@@ -54,31 +54,49 @@ li {
 		</div>
 	</div>
 	
-	<!-- TÄHÄN KOHTAAN TARJOUKSIA YRITYKSILTÄ -->
-	<ul class="offers">
-		<li th:each="offer : ${offers}">
-			<div class="card" style="width: 18rem;">
-				<img src="..." class="card-img-top" alt="...">
-				<div class="card-body">
-					<h5 class="card-title" th:text="${offer.enterprise.name}" >Card title</h5>
-					<p class="card-text">Hinta asennukselle yhteensä <b><span th:text="${offer.totalPrice}"></span> €</b><br>
-					Jono: <b><span th:text="${offer.enterprise.freeInDays}"></span></b> päivää<br>Asennuksen yhteydessä asennetaan:</p>
-				</div>
-				 
-				<ul class="list-group list-group-flush">
-					<li th:each="part : ${parts}">
-						<p class="list-group-item" th:text="${part}">An item</p>
-					</li>
-				</ul>
-				<div class="card-body">
-					<a th:href="@{/list/offer/{id}/{rek}(id=${offer.offerId}, rek=${rek})}" class="card-link">Valitse tarjous</a> <a href="#"
-						class="card-link">Tutustu yritykseen</a>
-				</div>
-			</div>
-		</li>
-
-	</ul>
-
+	<!-- TARJOUKSESTA VARAUKSEEN JA ASIAKKAAN LISÄÄMINEN AUTOLLE, YRITYKSELLE SEKÄ VARAUKSELLE -->
+	
+	<div class="w3-container w3-padding-64" id="customerInfo">
+			<h1>Anna vielä tietosi varauksen vahvistamiseksi</h1>
+			<div><p>Tähän voisi laittaa mitä vaiheita vahvistus sisältää...</p></div>
+			<br>
+			<p><b></b></p>
+			
+			<form th:action="@{/addnewcustomer/{id}(id=${offer.offerId})}" th:object="${customer}"
+				method="POST">
+				<p>
+					<input class="w3-input w3-padding-16" type="text"
+						th:field="*{custFirstName}" placeholder="Etunimi">
+				</p>
+				<p>
+					<input class="w3-input w3-padding-16" type="text"
+						th:field="*{custLastName}" placeholder="Sukunimi">
+				</p>
+				<p>
+					<input class="w3-input w3-padding-16" type="text"
+						th:field="*{custAddress}" placeholder="Katuosoite">
+				</p>
+				<p>
+					<input class="w3-input w3-padding-16" type="text"
+						placeholder="Postinumero" th:field="*{custPostcode}">
+				</p>
+				<p>
+					<input class="w3-input w3-padding-16" type="text"
+						placeholder="Kaupunki" th:field="*{custCity}">
+				</p>
+				<p>
+					<input class="w3-input w3-padding-16" type="text"
+						placeholder="Puhelinnummero" th:field="*{phone}">
+				</p>
+				<p>
+					<input class="w3-input w3-padding-16" type="email"
+						placeholder="Sähköpostiosoite" th:field="*{email}">
+				</p>
+				<p>
+					<button class="w3-button w3-light-grey w3-section" type="submit">Jatka</button>
+				</p>
+			</form>
+		</div>
 
 
 

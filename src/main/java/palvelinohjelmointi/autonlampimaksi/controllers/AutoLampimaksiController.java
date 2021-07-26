@@ -22,12 +22,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import palvelinohjelmointi.autonlampimaksi.models.Booking;
 import palvelinohjelmointi.autonlampimaksi.models.Car;
+import palvelinohjelmointi.autonlampimaksi.models.Customer;
 import palvelinohjelmointi.autonlampimaksi.models.Defaproduct;
 import palvelinohjelmointi.autonlampimaksi.models.Enterprise;
 import palvelinohjelmointi.autonlampimaksi.models.Offer;
 import palvelinohjelmointi.autonlampimaksi.models.User;
+import palvelinohjelmointi.autonlampimaksi.repositories.BookingRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.CarRepository;
+import palvelinohjelmointi.autonlampimaksi.repositories.CustomerRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.EnterpriseRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.OfferRepository;
 import palvelinohjelmointi.autonlampimaksi.repositories.UserRepository;
@@ -60,6 +64,13 @@ public class AutoLampimaksiController {
 	
 	@Autowired
 	private CarRepository carRepository;
+	
+	@Autowired
+	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private BookingRepository bookingRepository;
+	
 
 	@RequestMapping(value="/login")
     public String login() {	
@@ -88,28 +99,55 @@ public class AutoLampimaksiController {
 	}
 	
 	// TARJOUKSIEN NÄYTTÄMINEN ASIAKKAALLE - UUSI HTML SIVU LIST.HTML
-	// LUOKKA TARJOUS => TALLENNETAAN JOKAINEN ANNETTU TARJOUS... EHKÄ? :)
+	// LUOKKA TARJOUS => TALLENNETAAN JOKAINEN TARJOUS, AUTO JA ASIAKAS JÄÄVÄT POIS VIELÄ TÄSSÄ VAIHEESSA:)
 	@GetMapping("/list/{rek}")
 	public String chooseEnterpriseByPrice(Model model, @PathVariable String rek) {
 		model.addAttribute("offer", new Offer());
-		
-		// TÄÄLTÄ TULEE ERRORIA, MUTTA TOIMII - TUO NULL ARVO HÄIRITSEE (EN TIEDÄ TARKALLEEN MISTÄ JOHTUU)
-		if (carRepository.findCarByPlate(rek) == null) {
-			carRepository.save(carService.getCarByRegisterplate(rek));
-		} 
-			
-		List<Defaproduct> productsFit = carService.getDefaproductsByCar(carRepository.findCarByPlate(rek));
-			
-		for (Enterprise enterprise : enterpriseRepository.findAll()) {
-			offerService.newOffer(enterprise, productsFit, carRepository.findCarByPlate(rek));
-		}
-		
+		List<Defaproduct> productsFit = carService.getDefaproductsByCar(carService.getCarByRegisterplate(rek));
+		// ANTAA HERJAN ARRAYLIST => MUKA TYHJÄ? VAIKKA LÖYTYY OSA
 		List<String> parts = offerService.getPartsOfTheOffer(productsFit.get(0));
+		List<Offer> offers = new ArrayList<>();
+		for (Enterprise enterprise : enterpriseRepository.findAll()) {
+			offers.add(offerService.newOffer(enterprise, productsFit));
+			offerRepository.save(offerService.newOffer(enterprise, productsFit));
+		}
 				
-		model.addAttribute("offers", offerRepository.findByCar(carRepository.findCarByPlate(rek)));
+		model.addAttribute("offers", offers);
 		model.addAttribute("parts", parts);
+		model.addAttribute("rek", rek);
 		
 		return "list";
+	}
+	
+	@GetMapping("/list/offer/{id}/{rek}")
+	public String customerChoseAnOffer(@PathVariable Long id, @PathVariable String rek, Model model, @Validated Customer customer, BindingResult bd) {
+		Offer offer = offerRepository.findById(id).get();
+		model.addAttribute("customer", new Customer());
+		model.addAttribute("offer", offer);
+		return "offer";
+	}
+	
+	@PostMapping("/addnewcustomer/{id}")
+	public String addNewCustomer(@PathVariable Long id, @Validated Customer customer, BindingResult bd) {
+		if (bd.hasErrors()) {
+			return "redirect:/list/offer/" + id;
+		}
+		
+		// MITÄ JOS ASIAKAS ON JO OLEMASSA? EI TARVETTA... TULEE ERROR JOS YRITTÄÄ LUODA ASIAKKAAN SAMALLA EMAILILLA
+		// TUON VIRHEEN KÄSITTELY TARPEEN
+		customerRepository.save(customer);
+		
+		// MITÄ JOS TARJOUKSELLA ON JO AUTO JA KYSEINEN ASIAKAS?
+		Offer offer = offerRepository.findById(id).get();
+		offer.getCar().setCustomer(customerRepository.findByEmail(customer.getEmail()));
+		offerRepository.save(offer);
+		
+		// MITÄ JOS VARAUS ON JO ALOITETTU, MUTTEI LOPETETTU? ASIAKASTIETOJEN SUOJAAMINEN?
+		Booking booking = new Booking();
+		booking.setOffer(offerRepository.findById(id).get());
+		bookingRepository.save(booking);
+		
+		return "redirect:/list/offer/" + id;
 	}
 	
 	@GetMapping("/enterprise/{id}")
@@ -133,7 +171,12 @@ public class AutoLampimaksiController {
 		
 		return "redirect:/";
 	}
-
+	/*
+	@GetMapping("/booking/{id}")
+	public String setBookingTime() {
+		
+	}
+	*/
 	
 	// REKISTERÖINTI
 	@GetMapping("/rekisterointi")

@@ -54,31 +54,9 @@ li {
 		</div>
 	</div>
 	
-	<!-- TÄHÄN KOHTAAN TARJOUKSIA YRITYKSILTÄ -->
-	<ul class="offers">
-		<li th:each="offer : ${offers}">
-			<div class="card" style="width: 18rem;">
-				<img src="..." class="card-img-top" alt="...">
-				<div class="card-body">
-					<h5 class="card-title" th:text="${offer.enterprise.name}" >Card title</h5>
-					<p class="card-text">Hinta asennukselle yhteensä <b><span th:text="${offer.totalPrice}"></span> €</b><br>
-					Jono: <b><span th:text="${offer.enterprise.freeInDays}"></span></b> päivää<br>Asennuksen yhteydessä asennetaan:</p>
-				</div>
-				 
-				<ul class="list-group list-group-flush">
-					<li th:each="part : ${parts}">
-						<p class="list-group-item" th:text="${part}">An item</p>
-					</li>
-				</ul>
-				<div class="card-body">
-					<a th:href="@{/list/offer/{id}/{rek}(id=${offer.offerId}, rek=${rek})}" class="card-link">Valitse tarjous</a> <a href="#"
-						class="card-link">Tutustu yritykseen</a>
-				</div>
-			</div>
-		</li>
-
-	</ul>
-
+	<!-- HALUTUN PÄIVÄN VALINTA JONON PERUSTEELLA - MITÄ LISÄPALVELUITA JOITA ASENNUSPISTE TARJOAA HALUTAAN -->
+	
+	
 
 
 
