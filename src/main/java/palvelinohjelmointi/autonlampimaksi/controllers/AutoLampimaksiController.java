@@ -108,8 +108,8 @@ public class AutoLampimaksiController {
 		List<String> parts = offerService.getPartsOfTheOffer(productsFit.get(0));
 		List<Offer> offers = new ArrayList<>();
 		for (Enterprise enterprise : enterpriseRepository.findAll()) {
-			offers.add(offerService.newOffer(enterprise, productsFit));
-			offerRepository.save(offerService.newOffer(enterprise, productsFit));
+			offers.add(offerRepository.save(offerService.newOffer(enterprise, productsFit)));
+			//offerRepository.save(offerService.newOffer(enterprise, productsFit));
 		}
 				
 		model.addAttribute("offers", offers);
@@ -127,28 +127,20 @@ public class AutoLampimaksiController {
 		return "offer";
 	}
 	
-	@PostMapping("/addnewcustomer/{id}")
-	public String addNewCustomer(@PathVariable Long id, @Validated Customer customer, BindingResult bd) {
+	@PostMapping("/addnewcustomer/{offerid}/{rek}")
+	public String addUserForCustomer(@PathVariable Long offerid, @PathVariable String rek, Model model, @Validated Customer customer, BindingResult bd) {
 		if (bd.hasErrors()) {
-			return "redirect:/list/offer/" + id;
+			return "redirect:/addnewcustomer/" + offerid + "/" + rek;
 		}
 		
-		// MITÄ JOS ASIAKAS ON JO OLEMASSA? EI TARVETTA... TULEE ERROR JOS YRITTÄÄ LUODA ASIAKKAAN SAMALLA EMAILILLA
-		// TUON VIRHEEN KÄSITTELY TARPEEN
-		customerRepository.save(customer);
+		Customer added = customerRepository.save(customer);
 		
-		// MITÄ JOS TARJOUKSELLA ON JO AUTO JA KYSEINEN ASIAKAS?
-		Offer offer = offerRepository.findById(id).get();
-		offer.getCar().setCustomer(customerRepository.findByEmail(customer.getEmail()));
-		offerRepository.save(offer);
-		
-		// MITÄ JOS VARAUS ON JO ALOITETTU, MUTTEI LOPETETTU? ASIAKASTIETOJEN SUOJAAMINEN?
-		Booking booking = new Booking();
-		booking.setOffer(offerRepository.findById(id).get());
-		bookingRepository.save(booking);
-		
-		return "redirect:/list/offer/" + id;
+		return "redirect:/reguser/" + offerid + "/" + rek + "/" + added.getCustomerId();
 	}
+	
+	// TÄHÄN KOHTAAN VIELÄ: REK, ASIAKASID JA SITTEN ASIAKKAAN LIITTÄMINEN AUTOON JA TARJOUKSEN VAHVISTAMINEN VARAUKSEKSI
+	@GetMapping("/reguser/{offerid}")
+	
 	
 	@GetMapping("/enterprise/{id}")
 	public String enterpriseUser(Model model, @PathVariable Long id) {
