@@ -99,7 +99,7 @@ public class CarService {
 					if (j[0].equals("enginecode")) {
 						car.setDevaEngineCode(j[1].trim());
 					}
-					car.setPlate(plate);
+					car.setPlate(plate.toUpperCase());
 				}
 			}			
 			

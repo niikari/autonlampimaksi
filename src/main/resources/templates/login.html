@@ -43,10 +43,12 @@ h1, h2, h3, h4, h5, h6 {
 	<br>
 	<br>
 <body>
+	
 	<div th:if="${param.error}">Invalid username and password.</div>
 	<div th:if="${param.logout}">You have been logged out.</div>
 	<form method="POST">
 		<div class="mb-3">
+		<p><b><span th:text="${message}">Flash viesti</span></b></p>
 			<label for="exampleInputEmail1" class="form-label">Sähköpostiosoite / käyttäjätunnuksesi</label> <input type="email" class="form-control"
 				id="exampleInputEmail1" name="username" aria-describedby="emailHelp" placeholder="Email">
 			<div id="emailHelp" class="form-text">Emme ikinä jaa antamaasi sähköpostiosoitetta muille</div>

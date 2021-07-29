@@ -73,9 +73,10 @@ li {
 					<input class="w3-input w3-padding-16" type="password"
 						placeholder="Salasanasi uudelleen" name="secondPwrd">
 				</p>
+				<p><b th:text="${message}">Flash viesti></b></p>
 				<p>
 					<label>Valitse mille päivälle haluat varata ajan<br>
-					Muista, että palveluntarjoajan jono oli: <b><span th:text="${jono}">Jono</span></b></label>
+					Muista, että palveluntarjoajan jono oli: <b><span th:text="${jono}">Jono</span></b> päivää!</label>
 					<input class="w3-input w3-padding-16" type="date"
 						placeholder="Valitse varattava päivä" name="bookedDate">
 				</p>

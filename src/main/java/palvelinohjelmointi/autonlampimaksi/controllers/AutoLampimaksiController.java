@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,11 +74,27 @@ public class AutoLampimaksiController {
 	@Autowired
 	private BookingRepository bookingRepository;
 	
-
+	
 	@RequestMapping(value="/login")
     public String login() {	
 		
         return "login";
+	}
+	
+	@PostMapping("/login")
+	public String loginUser(@RequestParam String username, @RequestParam String password) {
+		User user = userRepository.findUserByUsername(username);
+		if (password.equals(password)) {
+			if (user.getEnterprise() == null) {
+				// KULUTTAJA
+				
+			} else {
+				// PALVELUNTARJOAJA
+				
+			}
+			
+		}
+		return "redirect:/";
 	}
 	
 	
@@ -104,7 +121,13 @@ public class AutoLampimaksiController {
 	// TARJOUKSIEN NÄYTTÄMINEN ASIAKKAALLE - UUSI HTML SIVU LIST.HTML
 	// LUOKKA TARJOUS => TALLENNETAAN JOKAINEN TARJOUS, AUTO JA ASIAKAS JÄÄVÄT POIS VIELÄ TÄSSÄ VAIHEESSA:)
 	@GetMapping("/list/{rek}")
-	public String chooseEnterpriseByPrice(Model model, @PathVariable String rek) {
+	public String chooseEnterpriseByPrice(Model model, @PathVariable String rek, RedirectAttributes redirAttrs) {
+		// JOS AUTO ON JO MERKITTY JOLLEKKIN ASIAKKAALLE NIIN OHJATAAN LOGIN SIVULLE
+		// TÄHÄN PITÄISI SAADA FLASH VIESTI => AUTO ON JO MERKITTY ASIAKKAALLE - OLE HYVÄ JA KIRJAUDU SISÄÄN
+		if (carRepository.findCarByPlate(rek.toUpperCase()) != null) {
+			redirAttrs.addFlashAttribute("message", "Ajoneuvo on jo rekisteröity käyttäjälle, ole hyvä ja kirjaudu nähdäksesi lisätietoja.");
+			return "redirect:/login";
+		}
 		model.addAttribute("offer", new Offer());
 		List<Defaproduct> productsFit = carService.getDefaproductsByCar(carService.getCarByRegisterplate(rek));
 		// ANTAA HERJAN ARRAYLIST => MUKA TYHJÄ? VAIKKA LÖYTYY OSA
@@ -146,39 +169,41 @@ public class AutoLampimaksiController {
 	@GetMapping("/reguser/{offerid}/{rek}/{custid}")
 	public String regCustomersUser(@PathVariable Long offerid, @PathVariable String rek, @PathVariable Long custid, Model model) {
 		//model.addAttribute("user", new User());
+		Offer offer = offerRepository.findById(offerid).get();
+		Enterprise ent = offer.getEnterprise();
+		model.addAttribute("jono", ent.getFreeInDays());
 		Customer customer = customerRepository.findById(custid).get();
 		model.addAttribute("email", customer.getEmail());
 		return "customeruser";
 	}
 	
 	@PostMapping("/reguser/{offerid}/{rek}/{custid}")
-	public String addCustomersUser(@PathVariable Long offerid, @PathVariable String rek, @PathVariable Long custid, Model model,
+	public String addCustomersUser(@PathVariable Long offerid, @PathVariable String rek, @PathVariable Long custid, Model model, RedirectAttributes redirAttrs,
 			@RequestParam String firstPwrd, @RequestParam String secondPwrd, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedDate) {
 		
-		Car car = carService.getCarByRegisterplate(rek);
-		car.setCustomer(customerRepository.findById(custid).get());
-		carRepository.save(car);
-		Offer offer = offerRepository.findById(offerid).get();
-		offer.setCar(car);
-		offerRepository.save(offer);
-		Enterprise ent = offer.getEnterprise();
-		model.addAttribute("jono", ent.getFreeInDays());
-		Booking booking = new Booking();
-		booking.setOffer(offer);
-		User user = new User();
-		if (firstPwrd.equals(secondPwrd)) {
+		if (firstPwrd.equals(secondPwrd) && bookedDate != null) {
+			Booking booking = new Booking();
+			Car car = carService.getCarByRegisterplate(rek);
+			car.setCustomer(customerRepository.findById(custid).get());
+			carRepository.save(car);
+			Offer offer = offerRepository.findById(offerid).get();
+			offer.setCar(car);
+			offerRepository.save(offer);			
+			booking.setOffer(offer);
+			User user = new User();
 			user.setUsername(customerRepository.findById(custid).get().getEmail());
 			user.setPasswordHash(secondPwrd);
 			userRepository.save(user);
 			booking.setBookedDate(bookedDate);
-		} else {
+		} else if (!firstPwrd.equals(secondPwrd)) {
 			// YRITIN SAADA FLASHVIESTIN TOIMIMAAN - KUN ANTAA ERI SALASANAT => TULISI TULLA ILMOITUS
-			// redirAttrs.addFlashAttribute("message", "This is message from flash");
+			redirAttrs.addFlashAttribute("message", "Salasanojen pitää olla samat, yritäs uudelleen");
+			return "redirect:/reguser/" + offerid + "/" + rek + "/" + custid;
+		} else {
+			redirAttrs.addFlashAttribute("message", "Valitse vielä haluamasi päivä asennukselle");
 			return "redirect:/reguser/" + offerid + "/" + rek + "/" + custid;
 		}
-		
-		Booking booked = bookingRepository.save(booking);
-		
+				
 		return "redirect:/";
 	}
 	
