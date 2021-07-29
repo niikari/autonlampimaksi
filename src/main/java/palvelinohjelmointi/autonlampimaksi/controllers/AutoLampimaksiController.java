@@ -2,6 +2,7 @@ package palvelinohjelmointi.autonlampimaksi.controllers;
 
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -74,6 +76,7 @@ public class AutoLampimaksiController {
 
 	@RequestMapping(value="/login")
     public String login() {	
+		
         return "login";
 	}
 	
@@ -124,6 +127,7 @@ public class AutoLampimaksiController {
 		Offer offer = offerRepository.findById(id).get();
 		model.addAttribute("customer", new Customer());
 		model.addAttribute("offer", offer);
+		model.addAttribute("rek", rek);
 		return "offer";
 	}
 	
@@ -139,8 +143,44 @@ public class AutoLampimaksiController {
 	}
 	
 	// TÄHÄN KOHTAAN VIELÄ: REK, ASIAKASID JA SITTEN ASIAKKAAN LIITTÄMINEN AUTOON JA TARJOUKSEN VAHVISTAMINEN VARAUKSEKSI
-	@GetMapping("/reguser/{offerid}")
+	@GetMapping("/reguser/{offerid}/{rek}/{custid}")
+	public String regCustomersUser(@PathVariable Long offerid, @PathVariable String rek, @PathVariable Long custid, Model model) {
+		//model.addAttribute("user", new User());
+		Customer customer = customerRepository.findById(custid).get();
+		model.addAttribute("email", customer.getEmail());
+		return "customeruser";
+	}
 	
+	@PostMapping("/reguser/{offerid}/{rek}/{custid}")
+	public String addCustomersUser(@PathVariable Long offerid, @PathVariable String rek, @PathVariable Long custid, Model model,
+			@RequestParam String firstPwrd, @RequestParam String secondPwrd, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate bookedDate) {
+		
+		Car car = carService.getCarByRegisterplate(rek);
+		car.setCustomer(customerRepository.findById(custid).get());
+		carRepository.save(car);
+		Offer offer = offerRepository.findById(offerid).get();
+		offer.setCar(car);
+		offerRepository.save(offer);
+		Enterprise ent = offer.getEnterprise();
+		model.addAttribute("jono", ent.getFreeInDays());
+		Booking booking = new Booking();
+		booking.setOffer(offer);
+		User user = new User();
+		if (firstPwrd.equals(secondPwrd)) {
+			user.setUsername(customerRepository.findById(custid).get().getEmail());
+			user.setPasswordHash(secondPwrd);
+			userRepository.save(user);
+			booking.setBookedDate(bookedDate);
+		} else {
+			// YRITIN SAADA FLASHVIESTIN TOIMIMAAN - KUN ANTAA ERI SALASANAT => TULISI TULLA ILMOITUS
+			// redirAttrs.addFlashAttribute("message", "This is message from flash");
+			return "redirect:/reguser/" + offerid + "/" + rek + "/" + custid;
+		}
+		
+		Booking booked = bookingRepository.save(booking);
+		
+		return "redirect:/";
+	}
 	
 	@GetMapping("/enterprise/{id}")
 	public String enterpriseUser(Model model, @PathVariable Long id) {
@@ -170,7 +210,7 @@ public class AutoLampimaksiController {
 	}
 	*/
 	
-	// REKISTERÖINTI
+	// U
 	@GetMapping("/rekisterointi")
 	public String enterpriseRegister(Model model) {
 		model.addAttribute("enterprise", new Enterprise());

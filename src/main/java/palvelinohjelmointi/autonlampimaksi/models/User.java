@@ -31,7 +31,7 @@ public class User {
 	private String passwordHash;
 	
 	@Column(name ="role", nullable=false)
-	private String role;
+	private String role = "customer";
 	
 	@ManyToOne
 	@JoinColumn(name="enterpriseId")

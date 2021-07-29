@@ -57,44 +57,32 @@ li {
 	<!-- TARJOUKSESTA VARAUKSEEN JA ASIAKKAAN LISÄÄMINEN AUTOLLE, YRITYKSELLE SEKÄ VARAUKSELLE -->
 	
 	<div class="w3-container w3-padding-64" id="customerInfo">
-			<h1>Anna vielä tietosi varauksen vahvistamiseksi</h1>
+			<h1>Vahvista vielä käyttäjätunnuksesi ja salasanasi palveluun</h1>
 			<div><p>Tähän voisi laittaa mitä vaiheita vahvistus sisältää...</p></div>
 			<br>
 			<p><b></b></p>
 			
-			<form th:action="@{/addnewcustomer/{id}/{rek}(id=${offer.offerId}, rek=${rek})}" th:object="${customer}"
+			<form th:object="${user}"
 				method="POST">
+				<p>Käyttäjätunnuksesi palveluumme on: <b><span th:text="${email}"></span></b></p>
 				<p>
-					<input class="w3-input w3-padding-16" type="text"
-						th:field="*{custFirstName}" placeholder="Etunimi">
+					<input class="w3-input w3-padding-16" type="password"
+						placeholder="Salasanasi" name="firstPwrd">
 				</p>
 				<p>
-					<input class="w3-input w3-padding-16" type="text"
-						th:field="*{custLastName}" placeholder="Sukunimi">
+					<input class="w3-input w3-padding-16" type="password"
+						placeholder="Salasanasi uudelleen" name="secondPwrd">
 				</p>
 				<p>
-					<input class="w3-input w3-padding-16" type="text"
-						th:field="*{custAddress}" placeholder="Katuosoite">
-				</p>
-				<p>
-					<input class="w3-input w3-padding-16" type="text"
-						placeholder="Postinumero" th:field="*{custPostcode}">
-				</p>
-				<p>
-					<input class="w3-input w3-padding-16" type="text"
-						placeholder="Kaupunki" th:field="*{custCity}">
-				</p>
-				<p>
-					<input class="w3-input w3-padding-16" type="text"
-						placeholder="Puhelinnummero" th:field="*{phone}">
-				</p>
-				<p>
-					<input class="w3-input w3-padding-16" type="email"
-						placeholder="Sähköpostiosoite" th:field="*{email}">
+					<label>Valitse mille päivälle haluat varata ajan<br>
+					Muista, että palveluntarjoajan jono oli: <b><span th:text="${jono}">Jono</span></b></label>
+					<input class="w3-input w3-padding-16" type="date"
+						placeholder="Valitse varattava päivä" name="bookedDate">
 				</p>
 				<p>
 					<button class="w3-button w3-light-grey w3-section" type="submit">Jatka</button>
 				</p>
+				
 			</form>
 		</div>
 
