@@ -28,4 +28,7 @@ public class Booking {
 	@JoinColumn(name="offerid")
 	private Offer offer;
 
+	@OneToOne
+	@JoinColumn(name="customerid")
+	private Customer customer;
 }

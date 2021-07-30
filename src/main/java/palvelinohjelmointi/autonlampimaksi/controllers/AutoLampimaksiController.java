@@ -45,7 +45,7 @@ import palvelinohjelmointi.autonlampimaksi.services.ParsingService;
 @Controller
 public class AutoLampimaksiController {
 	
-	private static final String url = "https://secure.defa.com/api/eh/searchregm/?regid=ere-523&c=f";
+	// private static final String url = "https://secure.defa.com/api/eh/searchregm/?regid=ere-523&c=f";
 	
 	@Autowired
 	private ParsingService parsingService;
@@ -81,22 +81,36 @@ public class AutoLampimaksiController {
         return "login";
 	}
 	
+	// TÄMÄ PITÄÄ VARMAAN TOTEUTTAA SECURITY LUOKAN TULLESSA MUKAAN KUVIOIHIN...
 	@PostMapping("/login")
-	public String loginUser(@RequestParam String username, @RequestParam String password) {
+	public String loginUser(@RequestParam String username, @RequestParam String password, RedirectAttributes redirAttrs) {
 		User user = userRepository.findUserByUsername(username);
-		if (password.equals(password)) {
+		if (password.equals(user.getPasswordHash())) {
 			if (user.getEnterprise() == null) {
 				// KULUTTAJA
-				
+				Customer customer = customerRepository.findByEmail(username);
+				return "redirect:/customerlogged/" + customer.getCustomerId();
 			} else {
 				// PALVELUNTARJOAJA
-				
+				return "redirect:/enterpriselogged";
 			}
 			
 		}
-		return "redirect:/";
+		redirAttrs.addFlashAttribute("message", "Käyttäjätunnus tai salasana virheellinen, yritä uudelleen tai rekisteröidy käyttäjäksi");
+		return "redirect:/login";
 	}
 	
+	@GetMapping("/customerlogged/{id}")
+	public String customerView(Model model, @PathVariable Long id) {
+		Customer customer = customerRepository.findById(id).get();
+		String customerName = customer.getCustFirstName() + " " + customer.getCustLastName();
+		model.addAttribute("customerName", customerName);
+		List<Car> cars = carRepository.findByCustomer(customer);
+		model.addAttribute("cars", cars);
+		List<Booking> bookings = bookingRepository.findByCustomer(customer);
+		model.addAttribute("bookings", bookings);
+		return "customerlogged";
+	}
 	
 	@GetMapping("/")
 	public String home(Model model) {
@@ -187,7 +201,8 @@ public class AutoLampimaksiController {
 			car.setCustomer(customerRepository.findById(custid).get());
 			carRepository.save(car);
 			Offer offer = offerRepository.findById(offerid).get();
-			offer.setCar(car);
+			Enterprise ent = offer.getEnterprise();
+			offer.setCar(car); 
 			offerRepository.save(offer);			
 			booking.setOffer(offer);
 			User user = new User();
@@ -195,8 +210,10 @@ public class AutoLampimaksiController {
 			user.setPasswordHash(secondPwrd);
 			userRepository.save(user);
 			booking.setBookedDate(bookedDate);
+			booking.setCustomer(customerRepository.findById(custid).get());
+			bookingRepository.save(booking);
+			redirAttrs.addFlashAttribute("message", "Kiitos ajanvarauksestasi, aika varattu " + ent.getName() + ". Varaus tehty päivälle: " + bookedDate);
 		} else if (!firstPwrd.equals(secondPwrd)) {
-			// YRITIN SAADA FLASHVIESTIN TOIMIMAAN - KUN ANTAA ERI SALASANAT => TULISI TULLA ILMOITUS
 			redirAttrs.addFlashAttribute("message", "Salasanojen pitää olla samat, yritäs uudelleen");
 			return "redirect:/reguser/" + offerid + "/" + rek + "/" + custid;
 		} else {
@@ -228,12 +245,16 @@ public class AutoLampimaksiController {
 		
 		return "redirect:/";
 	}
-	/*
-	@GetMapping("/booking/{id}")
-	public String setBookingTime() {
+	
+	@GetMapping("/user/customer/{id}")
+	public String customerLoggedIn(Model model, @PathVariable Long id) {
+		Customer customer = customerRepository.findById(id).get();
+		List<Car> cars = carRepository.findByCustomer(customer);
 		
+		model.addAttribute("cars", cars);
+		model.addAttribute("customer", customer);
+		return "";
 	}
-	*/
 	
 	// U
 	@GetMapping("/rekisterointi")

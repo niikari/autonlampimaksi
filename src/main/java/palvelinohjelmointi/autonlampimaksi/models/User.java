@@ -30,9 +30,6 @@ public class User {
 	@Column(name="password", nullable=false)
 	private String passwordHash;
 	
-	@Column(name ="role", nullable=false)
-	private String role = "customer";
-	
 	@ManyToOne
 	@JoinColumn(name="enterpriseId")
 	private Enterprise enterprise;
@@ -40,6 +37,5 @@ public class User {
 	public User(String username, String password, String role) {
 		this.username = username;
 		this.passwordHash = password;
-		this.role = role;
 	}
 }

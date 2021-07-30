@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -43,4 +44,7 @@ public class Customer {
 	@JsonIgnore
 	@OneToMany(cascade=CascadeType.ALL,mappedBy="customer")
 	List<Rating> ratings;
+	
+	@OneToOne(mappedBy="customer")
+	private Booking booking;
 }
